@@ -1,0 +1,128 @@
+/*
+90. Subsets II
+
+
+Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
+
+
+Example:
+
+Input: [1,2,2]
+Output:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+
+
+Notes :
+
+1.This is a slightly modified version of the problem Subsets , in this we have to deal with dupilicate value in the nums array as well.
+2. So the main idea of recursion + backtracking will be valid for this question .
+3. we will need a peice of code which will deal with the duplicates.
+4. For all the duplicates to be grouped we will first sort the array.
+
+
+
+*/
+
+
+Solution 1:
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        
+        sort(nums.begin(),nums.end());
+        
+        vector<vector<int>> ans;
+        vector<int> curr;
+        dfs(nums,curr,ans,0,true);
+        return ans;
+          
+        
+    }
+    
+    void dfs(vector<int> nums,vector<int>curr,vector<vector<int>> &ans,int index)
+    {
+        ans.push_back(curr);
+        if(index>=nums.size()) return;
+        
+        for(int i=index;i<nums.size();i++)
+        {
+// The main difference bw this and subsets 1 is that this has duplicates in the array nums which needs to be taken care of.
+// while going in depth with each element we check if the curr element is same as previous if it is then we skip it.
+            
+            
+            if(i>index && nums[i]==nums[i-1]) continue;   //Deals with duplicates.
+            curr.push_back(nums[i]);                     // reason why i>index is so it won;t interfere with depth
+            dfs(nums,curr,ans,i+1);
+            curr.pop_back();
+        }
+        
+    }
+    
+
+    
+    
+    
+    
+    
+    
+    
+    };
+    
+    
+    
+    //The main idea for this solution is that:-
+
+    //if the current index value is the same as the previous
+    //and the previous value has been skipped ( meaning that the
+    //previous value maust also had been proccessed already
+    // so we return from that point since
+    //if we go further we will get the same call stack as we
+    // would have gotten with the previous index value
+    
+    
+    Solution 2:
+    
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> ans;
+        vector<int> curr;
+        dfs(nums,curr,ans,0,true);
+        return ans;
+          
+        
+    }
+    void dfs(vector<int> nums,vector<int>curr,vector<vector<int>> &ans,int index,bool skipped)
+    {
+        if(index==nums.size())
+        {
+            ans.push_back(curr);
+            return;
+        }
+        
+        dfs(nums,curr,ans,index+1,true);
+        if(index>0 && nums[index]==nums[index-1] && skipped) return;
+
+
+// 1 2 *2 3 :- [1 2] [1 2 *2] [1 2 *2 3 ] [1 2 3] would be same as 
+//  2 skipped  [1 *2] [1 *2 3] that's why we return.
+        
+            curr.push_back(nums[index]);
+            dfs(nums,curr,ans,index+1,false);
+            curr.pop_back();
+        
+    }
+};
