@@ -17,4 +17,80 @@ Output:
 ]
 
 
+
+
+
+Notes :-
+
+1. First read the question carefully , the question is asking for all the possible partitions of the input
+string which only have valid pallindromes as substrings.
+2. So if there's any partition which has any substring which is not a pallindrome then we'll skip it.
+3. since we're talking about substrings the order of characters will remain constant however the partitioning 
+will be explored.
+4. A string s= aab could be partitioned in the following ways.
+
+  aab= [a,a,b][a,ab][aa,b][aab]
+  [aab] and [a,ab] will not be partitions with valid pallindromes.
+  
+5. so we start initially with 1 character string then 2 then 3 and so on at each stage, and while doing so
+we also check if the string formed is a valid pallindrome or not if it's not we immediately return because the 
+partition can not have any non pallindrome substrings.
+
+if it's a valid pallindrome we go to next recursion stage.
+
+s=aab
+                                                           after BT
+        ['a']ab          ['a''a']b        ['a''a''b']    ['a','ab']
+        ['aa'],b         ['aa''b']
+        ['aab']
+
+                                
 */
+
+
+//Solution 1:-
+
+class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+     
+        vector<vector<string>>ans;
+        vector<string> currP;
+        
+        dfs(s,ans,currP,0);
+        return ans;
+        
+    }
+    void dfs(string s,vector<vector<string>>&ans,vector<string> currP,int pos)
+    {
+        if(pos==s.size())
+        {
+            ans.push_back(currP);
+            return;
+        }
+        
+        for(int i=pos;i<s.size();i++){
+            
+            if(validP(s,pos,i))
+            {
+                currP.push_back(s.substr(pos,i-pos+1));
+                dfs(s,ans,currP,i+1);
+                currP.pop_back();
+            }
+            
+            
+        }
+        
+    }
+    bool validP(string s,int start,int end)
+    {
+        while(start<end)
+        {
+            if(s[start]!=s[end]) return false;
+            start++;
+            end--;
+            
+        }
+        return true;
+    }
+};
