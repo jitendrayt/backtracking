@@ -101,6 +101,19 @@ public:
         }
     }
   };
+  
+  /* 
+  
+  Time Complexity:-
+  
+  In this solution we are not using the characters we have used previously but still we are going through
+  all the characters at each stage so the time complexity for this solution would be :-
+  
+  O(N^N) since we are going throught N choices at each recursion stage.
+  
+  
+  
+  */
     
     
 Solution 2:-   Fixing the characters at a postion and starting from next positioin in next recurision stage.
@@ -129,7 +142,7 @@ public:
         for(int i=index;i<nums.size();i++)
         {
             swap(nums[index],nums[i]);
-           // swapping and fixing the character in each call.
+           // swapping and fixing the character at each recursion stage.
             dfs(nums,ans,index+1);
             swap(nums[index],nums[i]);
         }
@@ -138,12 +151,27 @@ public:
     }
 
     
-    
+   
 };
 
+ 
+ /* 
+  
+  Time Complexity:-
+  
+  In this solution we are reducing the number of choices by 1 at each stage since we are fixing a character 
+  at each stage so there would be 1 less character to worry about at the next stage.
+  
+  
+  O(N!) since we are reducing the no of choices by 1 at each recursion stage. N * n-1*n-2....1
+  
+  
+  
+  */
 
 /* 
 BT= Backtrack
+
 ex:- 1,2,3
 
 
