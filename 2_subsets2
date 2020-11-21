@@ -2,7 +2,8 @@
 90. Subsets II
 
 
-Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
+Given a collection of integers that might contain duplicates, nums, return all possible subsets 
+(the power set).
 
 Note: The solution set must not contain duplicate subsets.
 
@@ -24,7 +25,8 @@ Output:
 
 Notes :
 
-1.This is a slightly modified version of the problem Subsets , in this we have to deal with dupilicate value in the nums array as well.
+1.This is a slightly modified version of the problem Subsets , in this we have to deal with dupilicate 
+value in the nums array as well.
 2. So the main idea of recursion + backtracking will be valid for this question .
 3. we will need a peice of code which will deal with the duplicates.
 4. For all the duplicates to be grouped we will first sort the array.
@@ -57,12 +59,13 @@ public:
         
         for(int i=index;i<nums.size();i++)
         {
-// The main difference bw this and subsets 1 is that this has duplicates in the array nums which needs to be taken care of.
-// while going in depth with each element we check if the curr element is same as previous if it is then we skip it.
+// The main difference bw this and subsets 1 is that this has duplicates in the array nums which needs to be
+// taken care of while going in depth with each element we check if the curr element is same as previous 
+// if it is then we skip it.
             
             
             if(i>index && nums[i]==nums[i-1]) continue;   //Deals with duplicates.
-            curr.push_back(nums[i]);                     // reason why i>index is so it won;t interfere with depth
+            curr.push_back(nums[i]);              // reason why i>index is so it won;t interfere with depth
             dfs(nums,curr,ans,i+1);
             curr.pop_back();
         }
