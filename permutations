@@ -1,0 +1,172 @@
+/*
+
+46. Permutations
+
+Medium
+
+Given an array nums of distinct integers, return all the possible permutations.
+You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+Example 2:
+
+Input: nums = [0,1]
+Output: [[0,1],[1,0]]
+
+Example 3:
+
+Input: nums = [1]
+Output: [[1]]
+
+
+
+Notes :-
+
+1. First lets talk about permutations , basically there are 2 types of permutations
+  1.which allows duplicates
+    example:-
+            a combination lock with 3 dials numbered from 0-9(10 numbers) can have all three dials as [3,3,3]
+            the number of permutations this lock can have will be :- 
+            all possiblities*all possiblities*all possiblities*  = 10*10*10
+            or 
+            all possiblities^number of times
+
+  2. which dosen't allow duplicates
+   example:- permutations of a string "abc", initially we have 3 choices to choose from a ,b or c but
+   once we choose a character suppose 'a' then we only have 2 choices left for next character to choose
+   b and c next if we choose 'b' we only have 1 choice left for next character to choose.
+   no of permutations for string of length 3 will be :- 3*2*1 or 3!
+   
+   so the number of permutations for something of length n which dosen't allow duplicates will be :-
+   n*n-1*n-2......1.  or n!;
+   
+   
+   
+  2. For this question we are presented with 2nd type of permutation.
+  3. so we need to figure out a way by which we can skip all the characters we have 
+  already assigned in the permutation sofar, One possible way would be to use a set.
+  5. but this still requires us to check all the characters at each recurison stage.
+  6. another better approach would be to fix the character chosen at a position and start from the next
+    position in the next recursion stage.
+  7. we can sue swapping to fix the character at a position in each recursion stage.
+ 
+   
+*/
+
+
+
+
+//    Solution 1:-   Using a set.
+
+
+
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        
+        vector<vector<int>> ans;
+        vector<int> curr;
+        unordered_set<int> selected;  // We use a set to keep track of all characters selected so far
+        
+        dfs(nums,curr,ans,selected);
+        return ans;
+        
+    }
+    
+    void dfs(vector<int> nums,vector<int> curr,vector<vector<int>>& ans,unordered_set<int> selected)
+    {
+        if(curr.size()==nums.size())
+        {
+            ans.push_back(curr);
+            return;
+        }
+        
+        
+        
+        for(int i=0;i<nums.size();i++)
+        {
+            if(selected.find(nums[i])!=selected.end()) continue;  
+           // We skip the elements which have been already selected in previous calls.
+            curr.push_back(nums[i]);
+            selected.insert(nums[i]);
+            dfs(nums,curr,ans,selected);
+            curr.pop_back();
+            selected.erase(nums[i]);
+        }
+    }
+  };
+    
+    
+Solution 2:-   Fixing the characters at a postion and starting from next positioin in next recurision stage.
+  
+  
+  class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        
+        vector<vector<int>> ans;
+        vector<int> curr;
+        dfs(nums,ans,0);
+        return ans;
+        
+    }
+    
+    
+    void dfs(vector<int> nums,vector<vector<int>>& ans,int index)
+    {
+        if(index==nums.size())
+        {
+            ans.push_back(nums);
+            return;
+        }
+        
+        for(int i=index;i<nums.size();i++)
+        {
+            swap(nums[index],nums[i]);
+           // swapping and fixing the character in each call.
+            dfs(nums,ans,index+1);
+            swap(nums[index],nums[i]);
+        }
+        
+        
+    }
+
+    
+    
+};
+
+
+/* 
+BT= Backtrack
+ex:- 1,2,3
+
+
+    fix 1 = [1], 2,3
+      fix 2 = [1,2],3
+        fix 3 = [1,2,3]
+  BT fix 3 = [1,3],2
+        fix 2 = [1,3,2]
+ BT fix 2 = [2],1,3
+      fix 1 = [2,1],3
+        fix 3 = [2,1,3]
+  BT fix 3 = [1,3],1
+      fix 1 = [1,3,1]
+      .
+      .
+      .
+      .
+      .
+      and so on.
+      
+      
+
+
+
+
+*/
