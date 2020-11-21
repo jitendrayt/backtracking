@@ -35,7 +35,7 @@ Notes :-
             the number of permutations this lock can have will be :- 
             all possiblities*all possiblities*all possiblities*  = 10*10*10
             or 
-            all possiblities^number of times
+            all possiblities/choices^number of times
 
   2. which dosen't allow duplicates
    example:- permutations of a string "abc", initially we have 3 choices to choose from a ,b or c but
