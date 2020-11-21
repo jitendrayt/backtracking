@@ -106,10 +106,7 @@ public:
   
   Time Complexity:-
   
-  In this solution we are not using the characters we have used previously but still we are going through
-  all the characters at each stage so the time complexity for this solution would be :-
-  
-  O(N^N) since we are going throught N choices at each recursion stage.
+
   
   
   
