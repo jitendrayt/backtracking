@@ -1,0 +1,200 @@
+/*
+
+47. Permutations II
+Medium
+
+Given a collection of numbers, nums, that might contain duplicates, 
+return all possible unique permutations in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,2]
+Output:
+[[1,1,2],
+ [1,2,1],
+ [2,1,1]]
+
+Example 2:
+
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+
+
+
+
+Notes :-
+
+  1. This question is same as permutions 1 only difference being that the input array in this question
+  may have  duplicates. and we don't want any duplicates in out ans.
+  
+  2. The main difficulty of this problem is that if we use our Set approach which we used in permutation 1
+  it will not work because the input array has duplicates and we want to have all the character in our
+  permutation , if a character appears (1 in below example) and we put that in our set and if the
+  same character appears again it'll be skipped.
+  
+  ex:-  1,1,2 
+        [1],1,2 // skipping 1 because we have already seen it.
+        [1,2]
+
+3. Now if I use the second method which i used in permutation 1 which was to fix a character at each 
+recurison stage and only go through the remaining characters at the next recurison stage, by doing this 
+we will get duplicates permutations in our answer, for example suppose we have an array of numbers 
+arr= [1,*1,2] (duplicate 1 is denoted with a *) and then we try our approach :-
+
+BT =Backtrack
+
+    fix 1 =[1]*1,2
+      fix *1 =[1,*1],2
+        fix 2=[1,*1,2] original
+   BT fix 2=[1,2]*1
+        fix *1=[1,2,*1] original
+ BT fix *1=[*1]1,2
+      fix 1=[*1,1] 2
+        fix 2=[*1,1,2]  duplicate
+  BT fix 2=[*1,2]1,
+        fix 1=[*1,2,1]  duplicate
+
+
+
+4. Both of our previous approaches fail , but with some modifications we could make them work.
+
+5. we could use a map instead of the set and store each number as key and it's count in the array as the value
+then we can iterate through the map at each recursion level and only fix the element which has a value >0
+and reduce the value by 1 since we have fixed that number,  this will not create duplicate since we will
+always be interating throught unique values (map keys).
+
+6. to modify our second solution which uses swapping , we could sort the array to group all the duplicates
+together , the we will always check if the numbers we are swapping are the same if they are there's no need
+to fix the other number because that will have the same permutations as current. 
+also we will not swap back the numbers upon backtracking because if we do checking if current element is same
+as next element to be fixed will not matter.
+
+example :- 1,2,*2
+
+
+at some stage :    [1,2,*2]
+                   [2],1,*2
+                   [2,1],2
+                   [2,1,2]
+                   [2,*2],1  swap(*2 and 1)
+                   [2,*2,1]
+    fixed original [1,2,*2]    no if we backtrack to original position
+    checking if (1==*2)  will be false and we will fix *2 and it will create duplicate permutation
+don't fix original [2,*2,1]  cheking if(2==*2) will be true and we'll skip *2 causing no duplicates.
+(remember this will work because the numbers are sorted)
+*/
+
+
+
+
+//    Solution 1:-    Using hashmap to have unique iterations
+
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        
+        vector<vector<int>> ans;
+        unordered_map<int,int> hash;
+        vector<int> curr;
+        
+        for(auto i:nums)
+        {
+            if(hash.find(i)==hash.end()) hash[i]=0;
+            hash[i]+=1;
+        }
+        
+        dfs(nums,ans,hash,curr);
+        return ans;
+        
+        
+    }
+    void dfs(vector<int> nums,vector<vector<int>> & ans,unordered_map<int,int> hash,vector<int> curr)
+    {
+        if(curr.size()==nums.size())
+        {
+            ans.push_back(curr);
+            return;
+        }
+        
+        for(auto pair:hash)
+        {
+            int val=pair.first;
+            int count=pair.second;
+            if(count<=0) continue;
+            
+            curr.push_back(val);
+            hash[val]-=1;
+            dfs(nums,ans,hash,curr);
+            curr.pop_back();
+            hash[val]+=1;
+        }
+    }
+};
+
+
+/* Time Complexity :- 
+
+
+*/
+
+
+
+Solution 2:-  fixing a number only if it's not equal to previously fixed.
+
+
+
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        
+        vector<vector<int>> ans;
+        sort(nums.begin(),nums.end());
+    
+        
+        dfs(nums,ans,0);
+        return ans;
+        
+        
+    }
+    void dfs(vector<int> nums,vector<vector<int>> & ans,int index)
+    {
+        if(index==nums.size())
+        {
+            ans.push_back(nums);
+        }
+        
+        for(int i=index;i<nums.size();i++)
+        {
+            if(i>index && nums[i]==nums[index]) continue;
+/*
+The reason we are always compairing nums[i] with nums[index] is if the next value at 
+nums[i] is same as nums[i-1] which we would've already swapped in the last loop, which should 
+currently be at the index nums[index] so if it's same as that we would skip it. for ex nums at
+some stage =  [2,1,2] index=0 , i=2, if we do not skip nums[i] then we will get same ans as nums[index].
+*/
+    
+            swap(nums[index],nums[i]); 
+    
+            dfs(nums,ans,index+1);
+/*
+remember we are passing index+1 and not i+1, since index+1 would be the correct index for 
+the next level of dfs/next index in nums.
+            
+The reason we do not swap back nums[i] and nums[index] beacause if we do then  
+if(i>index && nums[i]==nums[index]) which checks if our next nums[i] value is same as current will not work.
+  */
+  
+  }
+    }
+};
+
+
+/*    Time Complexity:- 
+
+
+*/
+
+
