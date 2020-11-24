@@ -1,0 +1,52 @@
+
+3 Keys of Backtracking.
+
+
+1. Choice :- You have multiple choices out of which you choose one and at next recursion level you 
+may or may not have 1 less option/choice.
+2. Constraints :- The choice that you make is restricted/constrained by a proper set of constraints
+which you have to figure out by understanding the problem.
+3. Goal :- every problem has a final goal like solving a sudoku ,finding all permutations etc.
+
+
+Notes:- 
+
+1. Generally in Backtracking you're trying out all possible combinations/permutations(depending
+on the problem) hoping that at least one or more(again depending on problem)
+of those combination will be our solution.
+2. Backtracking is fundamentally based on recursion.
+3. Time Complexity of backtracking solutions is generally exponential.
+
+4. The core structure of a backtracking solution is :-
+
+
+     void recursion(){
+      
+        Our Goal { 
+      
+          this will be our goal or the recursion stage at which we will stop .
+      
+        }
+        
+        
+        for( Choice : try all choices one at a time   )
+        
+        { 
+          Constraints: check is each choice follows the constraints or not if not then there's
+          no point in going further in recursion level/tree.
+          
+          
+          Make a Choice :x
+          
+          recurison(x);
+          
+          Unmake a choice x: remove the choice and try next one.
+          
+          }
+        
+      
+      }
+      
+      
+      
+      
