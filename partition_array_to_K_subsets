@@ -1,0 +1,54 @@
+bool dfs(int A[],vector<int> currSet,unordered_set<int> set,
+int N,int K,bool &ans,int avgsubsetSum,int currSum)
+{
+    if(currSum==avgsubsetSum)
+    {
+        K-=1;
+        currSum=0;
+        currSet.clear();
+        if(K==0){
+            ans=1;
+            return true;
+        }
+        
+        
+        
+    }
+    if(currSum>avgsubsetSum) return false ;
+    if(K==0) return false;
+    
+    for(int i=0;i<N;i++)
+    {
+        if(set.find(A[i])!=set.end()) continue;
+        
+        set.insert(A[i]);
+        currSet.push_back(A[i]);
+        if(dfs(A,currSet,set,N,K,ans,avgsubsetSum,currSum+A[i]))
+        {
+            return true;
+        }
+        currSet.pop_back();
+        set.erase(A[i]);
+        
+    }
+    return false;
+}
+
+bool isKPartitionPossible(int A[], int N, int K)
+{
+     int totalSum=0;
+     for(int i=0;i<N;i++)
+     {
+         totalSum+=A[i];
+     }
+     if(totalSum%K!=0) return 0;
+     int avgsubsetSum=totalSum/K;
+     
+     bool ans=0;
+     
+     vector<int> currSet;
+     unordered_set<int> set;
+     dfs(A,currSet,set,N,K,ans,avgsubsetSum,0);
+     return ans;
+     
+}
